@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
+    'django_admin_inline_paginator',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +124,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = 'media/'
 
 MEDIA_URL = 'media/'
+
+LOGIN_REDIRECT_URL = '/'

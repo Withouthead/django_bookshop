@@ -1,12 +1,17 @@
 from django.contrib import admin
-from .models import Book, BookType
+from .models import Book, BookType, evaluation
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
-
+from django_admin_inline_paginator.admin import TabularInlinePaginated
 # Register your models here.
 
 admin.site.register(BookType)
 
+
+class EvalInline(TabularInlinePaginated):
+    per_page = 10
+    model = evaluation
+    extra = 0
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('isbn','book_name','wholesale_price','selling_price','sales_volume')
@@ -23,3 +28,4 @@ class BookAdmin(admin.ModelAdmin):
 
     # 页面显示的字段名称
     image_data.short_description = "书本图片"
+    inlines = (EvalInline,)
