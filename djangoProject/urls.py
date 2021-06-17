@@ -18,12 +18,16 @@ from django.urls import path
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
+from .settings import MEDIA_ROOT
 from catalog import views
 from django.views.generic import RedirectView
+from django.views.static import serve
+from django.conf.urls import url
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('catalog/', include('catalog.urls')),
     path('', RedirectView.as_view(url='/catalog/')),#重新定向根URL
+    url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT})
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

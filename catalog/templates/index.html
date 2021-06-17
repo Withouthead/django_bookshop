@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>网上图书商店</h1>
+
+    <p>欢迎来到<em>网上图书商店</em></p>
+
+<h2>动态内容</h2>
+
+  <p>现在商店有以下图书</p>
+  <ul>
+    <li><strong>Books:</strong> {{ num_books }}</li>
+  </ul>
+
+{% endblock %}
