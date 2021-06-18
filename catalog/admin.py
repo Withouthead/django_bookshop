@@ -18,7 +18,7 @@ class EvalInline(TabularInlinePaginated):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('isbn', 'book_name', 'wholesale_price', 'selling_price', 'sales_volume')
+    list_display = ('isbn', 'book_name', 'wholesale_price', 'selling_price', 'sales_volume', 'get_p')
     list_filter = ('author', 'sales_volume')
     readonly_fields = ('image_data',)  # 必须加这行 否则访问编辑页面会报错
     search_fields = ('isbn', 'book_name', 'wholesale_price', 'selling_price', 'sales_volume', 'author')
@@ -29,7 +29,10 @@ class BookAdmin(admin.ModelAdmin):
             height=obj.book_image.height,
         )
         )
-
+    def get_p(self,  obj):
+        return obj.get_p()
+    get_p.short_description = '利润'
+    get_p.admin_order_field = 'sales_volume'
     # 页面显示的字段名称
     image_data.short_description = "书本图片"
     inlines = (EvalInline,)

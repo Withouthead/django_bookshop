@@ -53,6 +53,8 @@ class Book(models.Model):
     class Meta:
         verbose_name = "图书"
         verbose_name_plural = "图书"
+    def get_p(self):
+        return (self.selling_price - self.wholesale_price) * self.sales_volume
 
 class evaluation(models.Model):
     content = models.TextField(verbose_name="评价内容", max_length=250, default="请输入评价")

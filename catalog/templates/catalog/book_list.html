@@ -15,16 +15,24 @@
     </table>
 
     {% if book_list %}
-        <ul>
+        <table style=" width: 1000px; min-height: 25px; line-height: 25px; text-align: center; border-color:#b6ff00; border-collapse: collapse;">
+            <tr>
+                <td>图书</td>
+                <td>作者</td>
+                <td>销量</td>
+                <td>单价</td>
+                <td></td>
+            </tr>
 
             {% for book in book_list %}
-                <li>
-
-                    <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> ({{ book.author }})
-                </li>
+                <tr>
+                    <td><a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a></td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.sales_volume }}</td>
+                    <td class="selling_price">{{ book.selling_price }}</td>
+                </tr>
             {% endfor %}
-
-        </ul>
+        </table>
     {% else %}
         <p>这里没有图书%>_<%.</p>
     {% endif %}

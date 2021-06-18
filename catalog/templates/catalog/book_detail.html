@@ -10,6 +10,7 @@
   <p><strong>语言:</strong> {{ book.language }}</p>
   <p><strong>类型:</strong> {% for type in book.book_type.all %} {{ type }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
     <p><strong>售价:</strong> {{ book.selling_price }} 元</p>
+    <p><strong>销量:</strong>{{ book.sales_volume }}</p>
     <ul style="float: left;list-style: none;" ></ul>
     {% csrf_token %}
     <li style="float: left;list-style: none;"><label>购买数量<input value="1" data-max="10" id="buy_num" style="width: 50px"></label></li>
