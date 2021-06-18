@@ -1,0 +1,105 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h3>购物车</h3>
+
+    {% if carts %}
+        <table style=" width: 1000px; min-height: 25px; line-height: 25px; text-align: center; border-color:#b6ff00; border-collapse: collapse;">
+            <tr>
+                <td>图书</td>
+                <td>单价</td>
+                <td>数量</td>
+                <td>总额</td>
+                <td></td>
+            </tr>
+
+            {% for cart in carts %}
+                <tr class="cart_id" id="{{ cart.id }}">
+                    <td><a href="{{ cart.book.get_absolute_url }}">{{ cart.book.book_name }}</a></td>
+                    <td class="selling_price">{{ cart.book.selling_price }}</td>
+                    <td><label><input class="num_show" style="width: 50px" value='{{ cart.book_sum }}'></label></td>
+                    <td class="sum_price"></td>
+                    <td>
+                        <button style="background-color: red;color: white;" onclick="cart_del({{ cart.id }})">删除
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td><h3>总计:</h3></td>
+                <td></td>
+                <td></td>
+                <td class="final_sum"></td>
+                <td>
+                    <button type="submit" onclick="window.location.href='{% url 'creat_order' %}'">结算</button>
+                </td>
+            </tr>
+        </table>
+    {% else %}
+        <p>现在购物车里没有图书%>_<%.</p>
+    {% endif %}
+    <script>
+        let total = function () {
+            let total_sum = 0.
+            $(".sum_price").each(
+                function () {
+
+                    //获取数量
+                    count = $(this).prev().find('input').val();
+                    //获取单价
+                    price = $(this).parent().find('.selling_price').text();
+                    //计算小计
+                    total0 = parseFloat(count) * parseFloat(price);
+                    //显示小计
+                    $(this).text('￥' + total0.toFixed(2));
+                    //加到总计上
+                    total_sum += total0
+                    {#total1 += total0;#}
+                    {#total_count++;#}
+
+                })
+            $('.final_sum').text('￥' + total_sum.toFixed(2))
+        }
+        total()
+        let cart_del = function (cart_id) {
+            {#let cart_id = $(this).parents().find(".cart_id").attr('id')#}
+            alert(cart_id)
+            let del = confirm('确定删除');
+            if (del) {
+                $.get('/catalog/carts/delete/' + cart_id, function (data) {
+                    if (data.ok === 1) {
+                        //删掉哪一行 商品
+                        $('tr').remove('#' + cart_id);
+                        total();
+                    }
+
+
+                })
+            }
+        }
+
+        $('.num_show').blur(function () {
+            let count = $(this).val();
+
+            if (count <= 0) {
+                alert('数量不能小于0');
+                return
+            }
+
+            let id = $(this).parents().find(".cart_id").attr('id')
+            $.get('/catalog/carts/edit/' + id + '/' + count, function (data) {
+                if (data["book_sum"] === 0) {
+                    //修改成功，计算总价
+                    total();
+                } else {
+                    //修改失败,改为原来 的值（回掉回来原来的值）
+                    $(this).val(data["book_sum"])
+                }
+
+
+            })
+
+        })
+
+    </script>
+{% endblock %}

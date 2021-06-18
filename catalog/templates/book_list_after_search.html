@@ -1,0 +1,46 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+     {% csrf_token %}
+    <h1>图书列表</h1>
+    <table>
+    <tr>
+        <td><input type="text" class="search"></input></td>
+        <td><button onclick="search()">{%csrf_token%}搜索</button></td>
+    </tr>
+
+    </table>
+
+    {% if book_list %}
+    <ul>
+
+      {% for book in book_list %}
+      <li>
+
+        <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> ({{book.author}})
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>现在商店里没有图书%>_<%.</p>
+    {% endif %}
+<script>
+    let search = function ()
+    {
+        let search_text = $('.search').val()
+        var  csrfmiddlewaretoken = '{{ csrf_token }}'
+        $.ajax(
+            {
+                url: "/catalog/books/search/",
+                type: "POST",
+
+                data: {
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                    "keyword": search_text
+                },
+            }
+        )
+    }
+</script>
+{% endblock %}

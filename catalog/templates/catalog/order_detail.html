@@ -1,0 +1,59 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>订单 {{ order.id }}</h1>
+
+    <table style=" width: 1000px; min-height: 25px; line-height: 25px; text-align: center; border-color:#b6ff00; border-collapse: collapse;">
+        <tr>
+            <td>图书</td>
+            <td>单价</td>
+            <td>数量</td>
+            <td>总额</td>
+            <td></td>
+        </tr>
+
+        {% for cart in order.get_cart_items %}
+            <tr class="cart_id" id="{{ cart.id }}">
+                <td><a href="{{ cart.book.get_absolute_url }}">{{ cart.book.book_name }}</a></td>
+                <td class="selling_price">{{ cart.book.selling_price }}</td>
+                <td>{{ cart.book_sum }}</td>
+                <td class="sum_price">{{ cart.get_total_sum }} ￥</td>
+            </tr>
+        {% endfor %}
+        <tr class="cart_id" id="{{ cart.id }}">
+            <td><h3>总计</h3></td>
+            <td></td>
+            <td></td>
+            <td class="sum_price">
+                <h3>{{ order.get_total_cost }} ￥<h3>
+            </td>
+        </tr>
+    </table>
+    <h3>
+        {% if order.order_status == 0 %}
+            订单状态: 处理中
+        {% elif order.order_status == 1 %}
+            订单状态: 配送中
+        {% elif order.order_status == 2 %}
+            订单状态: 已完成
+        {% else %}
+            订单状态: 已退回
+        {% endif %}
+    </h3>
+    <h3>
+        送货信息
+    </h3>
+    <ul>
+        <li>下单时间: {{ order.start_time }}</li>
+        {% if order.change_time != order.start_time %}
+            <li>订单修改时间: {{ order.change_time }}</li>
+        {% endif %}
+        <li>收货人姓名: {{ order.buyer_name }}</li>
+        <li>收货地址: {{ order.address }}</li>
+        <li>收货人手机号: {{ order.buyer_phone }}</li>
+        {% if order.end_time != null %}
+            <li>订单完成时间: {{ order.end_time }}</li>
+
+        {% endif %}
+    </ul>
+{% endblock %}

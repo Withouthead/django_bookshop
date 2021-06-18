@@ -1,7 +1,8 @@
 {% extends "base_generic.html" %}
 
-{% block content %}
 
+{% block content %}
+    <h1 lang = "book_id" id = {{ book.id }}>{{ book.book_name }}</h1>
     <p>{{ book.get_image }}</p>
   <p><strong>作者:</strong>{{ book.author }}</p> <!-- author detail link not yet defined -->
   <p><strong>介绍:</strong> {{ book.summary }}</p>
@@ -9,6 +10,40 @@
   <p><strong>语言:</strong> {{ book.language }}</p>
   <p><strong>类型:</strong> {% for type in book.book_type.all %} {{ type }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
     <p><strong>售价:</strong> {{ book.selling_price }} 元</p>
-  <div style="margin-left:20px;margin-top:20px">
-  </div>
+    <ul style="float: left;list-style: none;" ></ul>
+    {% csrf_token %}
+    <li style="float: left;list-style: none;"><label>购买数量<input value="1" data-max="10" id="buy_num" style="width: 50px"></label></li>
+    <li style="float: left;list-style: none;"><button id="buy_num_add" onclick="add_buy_num()" type="button">+</button></li>
+    <li style="float: left;list-style: none;"><button id="buy_num_sub" onclick="sub_buy_num()" type="button">-</button></li>
+    <li style="float: left;list-style: none;">
+        <button id="add_cart" type="button" style="color: white;background-color: red" onclick="add_to_craft()">加入购物车</button>
+    </li>
+
+    <script>
+    let add_buy_num = function()
+    {
+        let buy_num = $('#buy_num')
+        let new_num = Number(buy_num.val())
+        buy_num.val(String(new_num + 1))
+    }
+    let sub_buy_num = function ()
+    {
+        let buy_num = $('#buy_num')
+        let new_num = Number(buy_num.val())
+        new_num = Math.max(new_num-1, 1)
+        buy_num.val(String(new_num))
+    }
+    let add_to_craft = function ()
+    {
+        let buy_num = $('#buy_num')
+        let new_num = Number(buy_num.val())
+        let book_id = String($("h1[lang$='book_id']").attr('id'))
+        $.get("/catalog/carts/add/" + book_id + '/' + new_num,
+            function ()
+            {
+                alert("{{ book.book_name }}" + "已经添加到购物车")
+            }
+        )
+    }
+</script>
 {% endblock %}

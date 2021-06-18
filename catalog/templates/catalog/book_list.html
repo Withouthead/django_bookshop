@@ -1,20 +1,33 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+    {% csrf_token %}
     <h1>图书列表</h1>
+    <table>
+        <tr>
+            <form role="search" method="get" id="searchform" action="{% url 'book_search' %}">
+                {% csrf_token %}
+                <input type="search" name="keyword" placeholder="搜索">
+            <button type="submit">搜索</button>
+            </form>
+        </tr>
+
+    </table>
 
     {% if book_list %}
-    <ul>
+        <ul>
 
-      {% for book in book_list %}
-      <li>
+            {% for book in book_list %}
+                <li>
 
-        <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> ({{book.author}})
-      </li>
-      {% endfor %}
+                    <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> ({{ book.author }})
+                </li>
+            {% endfor %}
 
-    </ul>
+        </ul>
     {% else %}
-      <p>现在商店里没有图书%>_<%.</p>
+        <p>这里没有图书%>_<%.</p>
     {% endif %}
+    <script>
+    </script>
 {% endblock %}
